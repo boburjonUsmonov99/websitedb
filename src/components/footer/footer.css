@@ -1,0 +1,20 @@
+.footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+ 
+    padding: 50px;
+    background-color: skyblue; 
+    color: #333; 
+    font-family: 'Arial', sans-serif; 
+    font-size: 0.9em; 
+    border-top: 1px solid #DDD; 
+  }
+
+  .footer-text {
+    font-size: 20px;
+    font-weight: 600;
+  
+  }
+  
+  

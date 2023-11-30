@@ -1,0 +1,50 @@
+.about-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5rem;
+    background-color: #F0F0F0; /* Adjust to match the screenshot's background */
+    color: #333; /* Adjust to match the text color in the screenshot */
+  }
+  
+  .content {
+    flex: 1;
+    margin-right: 2rem;
+    background-color: white;
+    padding: 2rem;
+    border: 1px solid transparent;
+    border-radius: 20px;
+  
+  }
+  
+  .steps .step {
+    margin-bottom: 1rem;
+ 
+  }
+  
+  .steps h3 {
+    color: #6200EE; /* Adjust to match the color used for subheadings in the screenshot */
+  }
+  
+  .image-container {
+    flex: 1;
+    padding: 2rem;
+    background-color: white; /* This is for the white space around the map image */
+    border-radius: 8px; /* This gives the white space rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* This adds a subtle shadow around the white space */
+  }
+  
+  .image-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px; /* This gives the image rounded corners, if desired */
+
+  }
+  .about-title {
+    font-size: 3rem;
+  }
+  .about-subtitle {
+    font-size: 2rem;
+  }
+  
+  

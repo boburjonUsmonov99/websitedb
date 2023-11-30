@@ -1,0 +1,39 @@
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 3rem;
+    background-color: white; 
+    color: #FFFFFF; 
+    font-family: 'Arial', sans-serif;
+    position: fixed;
+    width: 100%;
+}
+  .brand-text {
+    font-size: 2em;
+    font-weight: bold;
+    color: black;
+    margin-left: 100px;
+  
+  }
+  .brand a {
+    text-decoration: none;
+  }
+  nav {
+    display: flex;
+    gap: 1rem; 
+    margin-right: 200px;
+  }
+  
+  nav a {
+    text-decoration: none;
+    color: #000;
+    font-size: 1em;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
+  }
+  
+  nav a:hover {
+    color: grey; 
+    cursor: pointer;
+  }

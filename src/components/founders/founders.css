@@ -1,0 +1,39 @@
+.founders-section {
+    text-align: center;
+    padding: 2rem;
+    background-color: #fff; /* Adjust to match the screenshot's background */
+  }
+  
+  .founders-section h2 {
+    margin-bottom: 2rem;
+  }
+  
+  .founder-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+  }
+  
+  .founder-card {
+    background-color: #f9f9f9; 
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 2s ease-out forwards;
+    opacity: 0;
+   
+  }
+  
+  .founder-card img {
+    width: 350px;
+    overflow: hidden;
+    height: 320px;
+    border-radius: 8px; 
+  }
+  
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+  

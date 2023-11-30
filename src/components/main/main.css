@@ -1,0 +1,25 @@
+main {
+    display: flex;
+    
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100vh; /* Full height */
+    background-color: #F5F5F5; /* Adjust the background color as needed */
+    color: #333333; /* Adjust the text color as needed */
+    font-family: 'Arial', sans-serif; /* You can choose a font that matches your design */
+  }
+  
+  main h1 {
+    font-size: 3em; /* Adjust the size as needed */
+    margin-bottom: 1rem;
+  }
+  .main-text {
+    width: 600px;
+  }
+  main img {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  
