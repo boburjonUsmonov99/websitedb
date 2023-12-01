@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import './signin.css'; // You can use the same CSS file or create a new one
+import axios from 'axios';
+import './signin.css';
 
 const SignInPage = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
 
@@ -14,10 +15,19 @@ const SignInPage = () => {
     });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle the sign-in logic here
-    console.log('Sign In Form Data:', formData);
+
+    try {
+      // Replace with your API endpoint
+      const response = await axios.post('http://127.0.0.1:8000/login/', formData);
+      console.log('Sign In Response:', response.data);
+
+      // Handle response. For example, save the auth token, redirect user, etc.
+    } catch (error) {
+      console.error('There was an error during sign in:', error);
+      // Handle error. For example, show error message to user.
+    }
   };
 
   return (
@@ -28,9 +38,9 @@ const SignInPage = () => {
           <p className='signin-text'>Email</p>
           <input
             className='signin-input'
-            type="email"
-            name="email"
-            value={formData.email}
+            type="text"
+            name="username"
+            value={formData.username}
             onChange={handleChange}
             required
           />

@@ -1,28 +1,60 @@
 import React, { useState } from 'react';
 import './signup.css';
+import axios from 'axios';
 
 const SignUpPage = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         password: '',
-        confirmPassword: '',
         driverDocument: null
     });
+
     const [isDriver, setIsDriver] = useState(false);
+
     const handleChange = (event) => {
-        setFormData({
-            ...formData,
-            [event.target.name]: event.target.value
-        });
+        if (event.target.name === 'driverDocument') {
+            setFormData({
+                ...formData,
+                driverDocument: event.target.files[0]
+            });
+        } else {
+            setFormData({
+                ...formData,
+                [event.target.name]: event.target.value
+            });
+        }
     };
+
     const handleDriverToggle = () => {
         setIsDriver(!isDriver);
     };
-    const handleSubmit = (event) => {
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
 
-        console.log('Form Data:', formData);
+        const dataToSend = {
+            username: formData.name,
+            email: formData.email,
+            password: formData.password,
+            // ...(isDriver && { driverDocument: formData.driverDocument })
+        };
+
+        // const formDataObj = new FormData();
+        // Object.keys(dataToSend).forEach(key => {
+        //     formDataObj.append(key, dataToSend[key]);
+        // });
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/register/', dataToSend, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error('There was an error!', error);
+        }
     };
 
     return (
@@ -62,18 +94,7 @@ const SignUpPage = () => {
                         required
                     />
                 </label>
-                <label>
-                    <p className='signup-text'>Confirm password</p>
-                    <input
-                        className='signup-input'
-                        type="password"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-                <button className='signup-button'  type="button" onClick={handleDriverToggle}>
+                <button className='signup-button' type="button" onClick={handleDriverToggle}>
                     Driver?
                 </button>
 
