@@ -1,25 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './trucker.css';
+import Modal from '../modal/modal'; // Ensure this path is correct
 
 const DriversDashboard = () => {
-    const [orders, setOrders] = useState([]);
+    const [orders, setOrders] = useState([
+        {
+            id: 1,
+            title: 'Order 1',
+            details: 'Deliver to California',
+            status: 'available' // This order is available
+        },
+        {
+            id: 2,
+            title: 'Order 2',
+            details: 'Deliver to Texas',
+            status: 'taken' // This order is taken
+        },
+        // Add more orders as needed
+    ]);
 
-    useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const response = await fetch('URL_TO_YOUR_API_ENDPOINT');
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setOrders(data); // Assuming the API returns an array of orders
-            } catch (error) {
-                console.error('Error fetching orders:', error);
-            }
-        };
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [showOrderModal, setShowOrderModal] = useState(false);
 
-        fetchOrders();
-    }, []);
+    const openOrderModal = (order) => {
+        setSelectedOrder(order);
+        setShowOrderModal(true);
+    };
+
+    const closeOrderModal = () => {
+        setSelectedOrder(null);
+        setShowOrderModal(false);
+    };
+
+    // Filter orders for different categories
+    const availableOrders = orders.filter(order => order.status === 'available');
+    const myOrders = orders.filter(order => order.status === 'taken');
 
     return (
         <div className="drivers-dashboard">
@@ -29,19 +44,24 @@ const DriversDashboard = () => {
                 <div className="available-orders">
                     <h2>Available Orders</h2>
                     <div className="orders-space">
-                        {orders.map(order => (
-                            <div key={order.id} className="order">
-                                {/* Display order details */}
+                        {availableOrders.map(order => (
+                            <div key={order.id} className="order" onClick={() => openOrderModal(order)}>
                                 <p>{order.title}</p>
-                                {/* Include other details as needed */}
+                                {/* Brief details can go here */}
                             </div>
                         ))}
                     </div>
                 </div>
+
                 <div className="taken-orders">
                     <h2>My Orders</h2>
                     <div className="orders-space">
-                        {/* Display taken orders here */}
+                        {myOrders.map(order => (
+                            <div key={order.id} className="order" onClick={() => openOrderModal(order)}>
+                                <p>{order.title}</p>
+                                
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
@@ -49,9 +69,22 @@ const DriversDashboard = () => {
             <section className="earnings">
                 <h2>Earnings</h2>
                 <div className="orders-space">
-                    {/* Display earnings information here */}
+                    <div className="earnings">
+                        <p className="earnings-amount">
+                            990000004$
+                        </p>
+                    </div>
                 </div>
             </section>
+
+            {selectedOrder && (
+                <Modal show={showOrderModal} onClose={closeOrderModal}>
+                    <h3>Order Details</h3>
+                    <p>Title: {selectedOrder.title}</p>
+                    <p>Details: {selectedOrder.details}</p>
+                    
+                </Modal>
+            )}
         </div>
     );
 };
