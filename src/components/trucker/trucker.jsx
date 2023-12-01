@@ -70,6 +70,7 @@ const DriversDashboard = () => {
                 <h2>Earnings</h2>
                 <div className="orders-space">
                     <div className="earnings">
+                        
                         <p className="earnings-amount">
                             990000004$
                         </p>

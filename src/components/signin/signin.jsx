@@ -19,14 +19,14 @@ const SignInPage = () => {
     event.preventDefault();
 
     try {
-      // Replace with your API endpoint
+     
       const response = await axios.post('http://127.0.0.1:8000/login/', formData);
       console.log('Sign In Response:', response.data);
 
-      // Handle response. For example, save the auth token, redirect user, etc.
+
     } catch (error) {
       console.error('There was an error during sign in:', error);
-      // Handle error. For example, show error message to user.
+     
     }
   };
 
