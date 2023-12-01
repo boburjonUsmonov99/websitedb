@@ -37,15 +37,11 @@ const SignUpPage = () => {
             username: formData.name,
             email: formData.email,
             password: formData.password,
-            // ...(isDriver && { driverDocument: formData.driverDocument })
+            is_trucker: isDriver,
         };
 
-        // const formDataObj = new FormData();
-        // Object.keys(dataToSend).forEach(key => {
-        //     formDataObj.append(key, dataToSend[key]);
-        // });
-
         try {
+            console.log('Data to send:', dataToSend);
             const response = await axios.post('http://127.0.0.1:8000/register/', dataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',

@@ -10,21 +10,24 @@ import SignInPage from './components/signin/signin';
 import DriversDashboard from './components/trucker/trucker';
 import ClientsDashboard from './components/client/client';
 import SignUpPage from './components/signup/signup';
+import { UserProvider } from './UserContext';
 
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<HomePageComponents />} />
-          <Route path="signin" element={<SignInPage />} />
-          <Route path="trucker" element={<DriversDashboard />} />
-          <Route path="client" element={<ClientsDashboard />} />
-          <Route path="signup" element={<SignUpPage />} />
-        </Route>
-      </Routes>
-    </Router>
+    <UserProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePageComponents />} />
+            <Route path="signin" element={<SignInPage />} />
+            <Route path="trucker" element={<DriversDashboard />} />
+            <Route path="client" element={<ClientsDashboard />} />
+            <Route path="signup" element={<SignUpPage />} />
+          </Route>
+        </Routes>
+      </Router>
+    </UserProvider>
   );
 }
 
@@ -33,7 +36,7 @@ function Layout() {
   return (
     <>
       <Header />
-      <Outlet /> 
+      <Outlet />
       <Footer />
     </>
   );

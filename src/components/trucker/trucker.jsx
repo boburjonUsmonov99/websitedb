@@ -1,26 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './trucker.css';
-import Modal from '../modal/modal'; // Ensure this path is correct
+import Modal from '../modal/modal';
+import { useUser } from '../../UserContext';
 
 const DriversDashboard = () => {
-    const [orders, setOrders] = useState([
-        {
-            id: 1,
-            title: 'Order 1',
-            details: 'Deliver to California',
-            status: 'available' // This order is available
-        },
-        {
-            id: 2,
-            title: 'Order 2',
-            details: 'Deliver to Texas',
-            status: 'taken' // This order is taken
-        },
-        // Add more orders as needed
-    ]);
-
+    const [availableOrders, setAvailableOrders] = useState([]);
+    const [myOrders, setMyOrders] = useState([]);
     const [selectedOrder, setSelectedOrder] = useState(null);
     const [showOrderModal, setShowOrderModal] = useState(false);
+
+    const { user } = useUser();
+    const driverId = user?.id;
+
+    useEffect(() => {
+        fetchOrders();
+    }, [driverId]);
+
+    const fetchOrders = async () => {
+        await fetchAvailableOrders();
+        await fetchMyOrders();
+    };
+
+    const fetchAvailableOrders = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:8000/api/available-orders');
+            setAvailableOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching available orders:', error);
+        }
+    };
+
+    const fetchMyOrders = async () => {
+        try {
+            const response = await axios.get(`http://127.0.0.1:8000/api/my-orders/${driverId}`);
+            setMyOrders(response.data);
+        } catch (error) {
+            console.error('Error fetching my orders:', error);
+        }
+    };
+
+    const handleClaimOrder = async (orderId) => {
+        try {
+            await axios.post(`http://127.0.0.1:8000/api/claim-order`, { orderId, driverId });
+            await fetchOrders(); // Refresh both lists after claiming an order
+        } catch (error) {
+            console.error('Error claiming order:', error);
+        }
+    };
 
     const openOrderModal = (order) => {
         setSelectedOrder(order);
@@ -31,10 +58,6 @@ const DriversDashboard = () => {
         setSelectedOrder(null);
         setShowOrderModal(false);
     };
-
-    // Filter orders for different categories
-    const availableOrders = orders.filter(order => order.status === 'available');
-    const myOrders = orders.filter(order => order.status === 'taken');
 
     return (
         <div className="drivers-dashboard">
@@ -47,7 +70,7 @@ const DriversDashboard = () => {
                         {availableOrders.map(order => (
                             <div key={order.id} className="order" onClick={() => openOrderModal(order)}>
                                 <p>{order.title}</p>
-                                {/* Brief details can go here */}
+                                <button onClick={() => handleClaimOrder(order.id)}>Claim</button>
                             </div>
                         ))}
                     </div>
@@ -59,7 +82,6 @@ const DriversDashboard = () => {
                         {myOrders.map(order => (
                             <div key={order.id} className="order" onClick={() => openOrderModal(order)}>
                                 <p>{order.title}</p>
-                                
                             </div>
                         ))}
                     </div>
@@ -70,8 +92,8 @@ const DriversDashboard = () => {
                 <h2>Earnings</h2>
                 <div className="orders-space">
                     <div className="earnings">
-                        
                         <p className="earnings-amount">
+                            {/* Earnings amount should be dynamically calculated or fetched */}
                             990000004$
                         </p>
                     </div>
@@ -81,9 +103,13 @@ const DriversDashboard = () => {
             {selectedOrder && (
                 <Modal show={showOrderModal} onClose={closeOrderModal}>
                     <h3>Order Details</h3>
-                    <p>Title: {selectedOrder.title}</p>
-                    <p>Details: {selectedOrder.details}</p>
-                    
+                    <p><strong>Title:</strong> {selectedOrder.title}</p>
+                    <p><strong>Car Brand:</strong> {selectedOrder.carBrand}</p>
+                    <p><strong>Car Title Number:</strong> {selectedOrder.carTitleNumber}</p>
+                    <p><strong>Location:</strong> {selectedOrder.location}</p>
+                    <p><strong>Destination:</strong> {selectedOrder.destination}</p>
+                    <p><strong>Price:</strong> ${selectedOrder.price}</p>
+                    <p><strong>ID:</strong> {selectedOrder.id}</p>
                 </Modal>
             )}
         </div>

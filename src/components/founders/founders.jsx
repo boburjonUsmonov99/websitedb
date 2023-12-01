@@ -20,9 +20,9 @@ const Founders = () => {
     <div className="founders-section" id="founders">
       <h2>Founders</h2>
       <div className="founder-cards-container">
-        <FounderCard name="Boburjon Usmonov" image={founder1Image} title="Top G" />
-        <FounderCard name="Ramziddin Suyunov" image={founder2Image} title="Bottom G" />
-        <FounderCard name="Mirshokhid Okilbekov" image={founder3Image} title="Beta Male" />
+        <FounderCard name="Boburjon Usmonov" image={founder1Image} title="Top G Beta" />
+        <FounderCard name="Ramziddin Suyunov" image={founder2Image} title="Top G Gamma" />
+        <FounderCard name="Mirshokhid Okilbekov" image={founder3Image} title="Top G Sigma" />
       </div>
     </div>
   );

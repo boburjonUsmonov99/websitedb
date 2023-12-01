@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './signin.css';
+import { useUser } from '../../UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const SignInPage = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
   });
+
+  const { setUser } = useUser();
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setFormData({
@@ -22,6 +27,19 @@ const SignInPage = () => {
      
       const response = await axios.post('http://127.0.0.1:8000/login/', formData);
       console.log('Sign In Response:', response.data);
+
+      const userData = response.data;
+
+      if (userData) {
+        setUser(userData); // Update user context
+  
+        // Redirect based on is_trucker flag
+        if (userData.is_trucker) {
+          navigate('/trucker');
+        } else {
+          navigate('/client');
+        }
+      }
 
 
     } catch (error) {

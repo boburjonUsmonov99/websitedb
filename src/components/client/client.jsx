@@ -1,52 +1,70 @@
 import React, { useState } from 'react';
 import './client.css';
 import Modal from '../modal/modal';
+import axios from 'axios';
+import { useUser } from '../../UserContext';
 
 const ClientsDashboard = () => {
   const [showModal, setShowModal] = useState(false);
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      title: 'Order 1',
-      carBrand: 'Toyota',
-      carTitleNumber: '123ABC',
-      location: 'New York',
-      destination: 'California',
-      estimatedArrival: '2023-01-01'
-    },
-    // Add more initial orders here if needed
-  ]);
+  const [orderFormData, setOrderFormData] = useState({
+    carBrand: '',
+    carTitleNumber: '',
+    location: '',
+    destination: ''
+  });
+  const [orders, setOrders] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [showOrderModal, setShowOrderModal] = useState(false);
 
+  const { user } = useUser();
+
   const openModal = () => setShowModal(true);
-  const closeModal = () => setShowModal(false);
+  const closeModal = () => {
+    setShowModal(false);
+    setOrderFormData({
+      carBrand: '',
+      carTitleNumber: '',
+      location: '',
+      destination: ''
+    });
+  };
 
   const openOrderModal = (order) => {
     setSelectedOrder(order);
     setShowOrderModal(true);
   };
-  const closeOrderModal = () => {
-    setSelectedOrder(null);
-    setShowOrderModal(false);
+  const closeOrderModal = () => setSelectedOrder(null);
+
+  const handleInputChange = (event) => {
+    setOrderFormData({
+      ...orderFormData,
+      [event.target.name]: event.target.value
+    });
   };
 
   const handleCreateOrder = async (event) => {
     event.preventDefault();
-  
-    const newOrderData = {
-      id: orders.length + 1,
-      title: 'New Mock Order',
-      carBrand: 'Honda',
-      carTitleNumber: '456DEF',
-      location: 'Boston',
-      destination: 'Miami',
-      estimatedArrival: '2023-02-01'
-    };
 
+    try {
+      const formToSend = {
+        ...orderFormData,
+        customer: user?.user_id
+      };
+      console.log('Form to send:', formToSend);
 
-    setOrders([...orders, newOrderData]);
-    closeModal();
+      const response = await axios.post('http://127.0.0.1:8000/requests/create/', formToSend, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const createdOrder = response.data;
+
+      setOrders([...orders, createdOrder]);
+      closeModal();
+    } catch (error) {
+      console.error('Error creating order:', error);
+    }
   };
 
   return (
@@ -57,26 +75,52 @@ const ClientsDashboard = () => {
           <h2>Place New Order</h2>
           <button className='form-button' onClick={openModal}>New Order</button>
           <Modal show={showModal} onClose={closeModal}>
-          <form className='new-order-form' onSubmit={handleCreateOrder}>
-            <form className='new-order-form'>
+            <form className='new-order-form' onSubmit={handleCreateOrder}>
               <label className='form-child'>
                 <p className='form-text'>Car Brand</p>
-                <input className='form-input' type="text" name="carBrand" />
+                <input
+                  className='form-input'
+                  type="text"
+                  name="carBrand"
+                  value={orderFormData.carBrand}
+                  onChange={handleInputChange}
+                  required
+                />
               </label>
               <label className='form-child'>
                 <p className='form-text'>Car Title Number</p>
-                <input className='form-input' type="text" name="carTitleNumber" />
+                <input
+                  className='form-input'
+                  type="text"
+                  name="carTitleNumber"
+                  value={orderFormData.carTitleNumber}
+                  onChange={handleInputChange}
+                  required
+                />
               </label>
               <label className='form-child'>
                 <p className='form-text'>Location of the Car</p>
-                <input className='form-input' type="text" name="location" />
+                <input
+                  className='form-input'
+                  type="text"
+                  name="location"
+                  value={orderFormData.location}
+                  onChange={handleInputChange}
+                  required
+                />
               </label>
               <label className='form-child'>
-                <p className='form-text'> Destination</p>
-                <input className='form-input' type="text" name="destination" />
-              </label  > 
+                <p className='form-text'>Destination</p>
+                <input
+                  className='form-input'
+                  type="text"
+                  name="destination"
+                  value={orderFormData.destination}
+                  onChange={handleInputChange}
+                  required
+                />
+              </label>
               <button className='form-button' type="submit">Create Order</button>
-            </form>
             </form>
           </Modal>
         </section>
@@ -100,7 +144,6 @@ const ClientsDashboard = () => {
             <p>Location: {selectedOrder.location}</p>
             <p>Destination: {selectedOrder.destination}</p>
             <p>Estimated Arrival: {selectedOrder.estimatedArrival}</p>
-         
           </Modal>
         )}
       </div>
